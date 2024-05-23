@@ -43,11 +43,7 @@ const SharePage: React.FC = () => {
         }
         const data = await response.json();
         if (data.gifts) {
-          const updatedGifts = data.gifts.map((gift: Gift) => ({
-            ...gift,
-            isReserved: localStorage.getItem(`gift_${gift.id}_reservation`) === "reserved",
-          }));
-          setGifts(updatedGifts);
+          setGifts(data.gifts);
         }
       } catch (error) {
         console.error("Error fetching gifts:", error);
@@ -59,10 +55,10 @@ const SharePage: React.FC = () => {
   const handleReserveClick = async (id: string) => {
     try {
       const updatedGifts = gifts.map((gift) =>
-        gift.id === id ? { ...gift, isReserved: !gift.isReserved } : gift
+        gift.id === id ? { ...gift, reserved: !gift.reserved } : gift
       );
       setGifts(updatedGifts);
-      localStorage.setItem(`gift_${id}_reservation`, updatedGifts.find((gift) => gift.id === id)?.isReserved ? "reserved" : "unreserved");
+      localStorage.setItem(`gift_${id}_reservation`, updatedGifts.find((gift) => gift.id === id)?.reserved ? "reserved" : "unreserved");
       
       await fetch(`/api/wishlists/share/${uuid}/reserve/${id}`, {
         method: "PUT",
@@ -130,9 +126,9 @@ const SharePage: React.FC = () => {
                       <div className="share-card-comment">Comment: {gift.description}</div>
                       <Button
                         onClick={() => handleReserveClick(gift.id)}
-                        className={`share-reserve-button ${gift.isReserved ? "reserved" : ""}`}
+                        className={`share-reserve-button ${gift.reserved ? "reserved" : ""}`}
                       >
-                        {gift.isReserved ? "Reserved" : "Reserve"}
+                        {gift.reserved ? "Reserved" : "Reserve"}
                       </Button>
                     </div>
                   </div>

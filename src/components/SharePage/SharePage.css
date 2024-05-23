@@ -139,7 +139,7 @@
   text-decoration: none;
   position: absolute;
   line-height: 0;
-  top: 220px;
+  top: 210px;
   width: 100%; /* Adjust width to fit within the parent */
 }
 
@@ -183,9 +183,15 @@
 
 }
 
+.share-reserve-button.cancel {
+  background-color: red;
+}
+
 .share-reserve-button.reserved {
   background-color: grey;
+  cursor: not-allowed;
 }
+
 
 /* Media queries for responsiveness */
 @media (max-width: 768px) {
